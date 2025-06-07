@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4kko's Bio Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Neon and Glassmorphism Effects */
+        .neon-text {
+            text-shadow: 0 0 2px #fff, 0 0 4px #fff;
+            color: #fff;
+        }
+
+        .neon-text-white {
+            text-shadow: 0 0 2px #fff, 0 0 4px #fff;
+            color: #fff;
+        }
+
+        .neon-border {
+            box-shadow: 0 0 2px #fff, 0 0 4px #fff;
+        }
+
+        .container {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        .timestamp {
+            background: rgba(0, 0, 0, 0.7);
+        }
+
+        /* Rain Effect */
+        .rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .drop {
+            position: absolute;
+            bottom: 100%;
+            width: 2px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.3);
+            animation: fall 1.5s linear infinite;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+            }
+        }
+
+        /* Entry Page Styles */
+        #entryPage {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 1s ease;
+        }
+
+        #entryPage.fade-out {
+            opacity: 0;
+        }
+
+        #profilePage {
+            display: none;
+        }
+
+        /* Audio Player Styling */
+        audio {
+            width: 100%;
+            margin-top: 1rem;
+            filter: drop-shadow(0 0 2px #fff);
+        }
+
+        audio::-webkit-media-controls-panel {
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body class="bg-black text-white min-h-screen overflow-hidden">
+    <div id="entryPage">
+        <h1 class="text-4xl font-bold neon-text-white cursor-pointer">Click to enter...</h1>
+    </div>
+    <div id="profilePage" class="flex justify-center items-center min-h-screen">
+        <div class="rain" id="rain"></div>
+        <div class="container z-10 p-4 max-w-md text-center">
+            <div class="profile flex items-center mb-2">
+                <div class="w-12 h-12 bg-gray-800 rounded-full mr-2 border-2 border-white neon-border"></div> <!-- Placeholder profile picture -->
+                <div>
+                    <h1 class="username text-xl md:text-2xl font-bold inline-block min-h-[1.2em] neon-text-white" id="username">4KKO</h1>
+                    <div class="badges inline-flex gap-1 ml-1">
+                        <span class="badge verified bg-black text-white px-1 py-0.5 rounded-full text-xs font-bold neon-border" title="Verified"><span class="text-lg">❖</span></span>
+                        <span class="badge founder bg-black text-white px-1 py-0.5 rounded-full text-xs font-bold neon-border" title="Founder"><span class="text-lg">♛</span></span>
+                        <span class="badge developer bg-black text-white px-1 py-0.5 rounded-full text-xs font-bold neon-border" title="laptop Developer"><span class="text-lg">💻</span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="text-gray-400 text-xs mb-2">joined 24 hours ago</div>
+            <p class="bio text-base md:text-lg text-white italic my-2 neon-text">"If God is all u have, u have all u need"</p>
+            <div class="timestamp flex items-center justify-center text-gray-400 text-xs mb-2 bg-black bg-opacity-50 rounded-lg p-1 neon-border">
+                <div class="w-6 h-6 bg-gray-800 rounded-full mr-1 border-2 border-white neon-border"></div> <!-- Placeholder profile picture for timestamp -->
+                <span>4kko @4kko • last seen now</span>
+            </div>
+            <div class="links flex justify-center gap-2">
+                <a href="#" class="text-white hover:text-gray-300" id="bitcoinIcon"><img src="https://img.icons8.com/ios-filled/50/ffffff/bitcoin.png" alt="Bitcoin" class="w-6 h-6"></a>
+                <a href="https://t.me/awpez" target="_blank" class="text-white hover:text-gray-300" id="telegramIcon"><img src="https://img.icons8.com/ios-filled/50/ffffff/telegram-app.png" alt="Telegram" class="w-6 h-6"></a>
+                <div class="flex items-center text-white-400 text-xs neon-text"><span title="Profile views">👁️‍🗨️ <span id="viewCount">264</span></span></div>
+                <a href="https://discord.com/users/415449922033418242" target="_blank" class="text-white hover:text-gray-300" id="discordIcon"><img src="https://img.icons8.com/ios-filled/50/ffffff/discord-logo.png" alt="Discord" class="w-6 h-6"></a>
+                <a href="#" class="text-white hover:text-gray-300" id="moneroIcon"><img src="https://img.icons8.com/ios-filled/50/ffffff/monero.png" alt="Monero" class="w-6 h-6"></a>
+            </div>
+            <!-- Audio Player for Rap Snitch Knishes -->
+            <div class="audio-player mt-4">
+                <audio id="backgroundAudio" controls>
+                    <source src="/rsk.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Entry Page Transition
+        const entryPage = document.getElementById("entryPage");
+        const profilePage = document.getElementById("profilePage");
+        const audio = document.getElementById("backgroundAudio");
+
+        entryPage.addEventListener("click", () => {
+            console.log("Entry page clicked");
+            entryPage.classList.add("fade-out");
+            setTimeout(() => {
+                entryPage.style.display = "none";
+                profilePage.style.display = "flex";
+                typeWriter();
+                setTimeout(() => {
+                    console.log("Attempting to play audio");
+                    audio.play().catch(err => {
+                        console.error("Audio play error: ", err);
+                    });
+                }, 90);
+            }, 1000);
+        });
+
+        // Typewriter Effect (Back and Forth with Pause)
+        const username = "4kko";
+        let i = 0;
+        let forward = true;
+        const speed = 300;
+        const pauseDuration = 2500;
+        const usernameElement = document.getElementById("username");
+        usernameElement.textContent = "";
+
+        function typeWriter() {
+            if (forward) {
+                if (i < username.length) {
+                    usernameElement.textContent += username.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, speed);
+                } else {
+                    setTimeout(() => {
+                        forward = false;
+                        i--;
+                        typeWriter();
+                    }, pauseDuration);
+                }
+            } else {
+                if (i >= 0) {
+                    usernameElement.textContent = username.slice(0, i);
+                    i--;
+                    setTimeout(typeWriter, speed);
+                } else {
+                    forward = true;
+                    i++;
+                    setTimeout(typeWriter, speed);
+                }
+            }
+            if (i === username.length) {
+                usernameElement.style.borderRight = "2px solid #fff";
+                setInterval(() => {
+                    usernameElement.style.borderRight = usernameElement.style.borderRight ? "" : "2px solid #fff";
+                }, 500);
+            }
+        }
+
+        // Rain Effect
+        const rainContainer = document.getElementById("rain");
+        const dropCount = 50;
+
+        for (let i = 0; i < dropCount; i++) {
+            const drop = document.createElement("div");
+            drop.className = "drop";
+            drop.style.left = `${Math.random() * 100}%`;
+            drop.style.animationDelay = `${Math.random() * 1.5}s`;
+            drop.style.opacity = Math.random() * 0.5 + 0.2;
+            rainContainer.appendChild(drop);
+        }
+
+        // Click Handlers for Crypto Icons
+        document.getElementById("bitcoinIcon").addEventListener("click", () => {
+            navigator.clipboard.writeText("3QD1knuF8RzTvNHg6mxFhRAGd47z5AzrWd").then(() => {
+                alert("Bitcoin address copied to clipboard!");
+            }).catch(err => {
+                alert("Failed to copy Bitcoin address: " + err);
+            });
+        });
+
+        document.getElementById("moneroIcon").addEventListener("click", () => {
+            navigator.clipboard.writeText("48zQmW7s6L1JFhWjSxq9Q4ZqRmYfbSvfEYr3LHoF1aEGv6TMDGc4C8G4gT4pMh1ZdV7j7mMRLpz1kxcmakjY2tUn3DdQgJr").then(() => {
+                alert("Monero address copied to clipboard!");
+            }).catch(err => {
+                alert("Failed to copy Monero address: " + err);
+            });
+        });
+    </script>
+</body>
+</html>
