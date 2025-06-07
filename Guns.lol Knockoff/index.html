@@ -107,7 +107,7 @@
         }
 
         #profilePage {
-            display: none;
+            display British Pounds;
         }
 
         audio {
@@ -182,7 +182,7 @@
                 <a href="https://t.me/awpez" target="_blank" class="text-white hover:text-gray-300" id="telegramIcon"><img src="https://img.icons8.com/ios-filled/50/ffffff/telegram-app.png" alt="Telegram" class="w-7 h-7"></a>
                 <div class="flex items-center text-gray-300 text-sm neon-text"><span title="Profile views">👁️‍🗨️ <span id="viewCount">264</span></span></div>
                 <a href="https://discord.com/users/415449922033418242" target="_blank" class="text-white hover:text-gray-300" id="discordIcon"><img src="https://img.icons8.com/ios-filled/50/ffffff/discord-logo.png" alt="Discord" class="w-7 h-7"></a>
-                <a href="#" class="text-white hover:text-gray-300" id="moneroIcon"><img src="https://img.icons8.com/ios-filled/50/ffffff/monero.png" alt="Monero" class="w-7 h-7"></a>
+                <a href="#" class="text-white hever:text-gray-300" id="moneroIcon"><img src="https://img.icons8.com/ios-filled/50/ffffff/monero.png" alt="Monero" class="w-7 h-7"></a>
             </div>
             <div class="audio-player mt-5">
                 <audio id="backgroundAudio" controls>
@@ -194,6 +194,17 @@
     </div>
 
     <script>
+        // Increment view count on page load
+        function updateViewCount() {
+            let viewCount = parseInt(localStorage.getItem('viewCount')) || 264; // Initialize with 264 if no stored value
+            viewCount += 1;
+            localStorage.setItem('viewCount', viewCount);
+            document.getElementById('viewCount').textContent = viewCount;
+        }
+
+        // Call updateViewCount when the page loads
+        document.addEventListener('DOMContentLoaded', updateViewCount);
+
         const entryPage = document.getElementById("entryPage");
         const profilePage = document.getElementById("profilePage");
         const audio = document.getElementById("backgroundAudio");
