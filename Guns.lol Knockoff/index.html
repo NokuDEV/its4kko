@@ -6,6 +6,9 @@
     <title>4KKO'S Profile</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -107,7 +110,7 @@
         }
 
         #profilePage {
-            display British Pounds;
+            display: flex;
         }
 
         audio {
@@ -165,7 +168,7 @@
                         <h1 class="username text-2xl md:text-3xl font-bold inline-block min-h-[1.2em] neon-text-white" id="username"></h1>
                     </div>
                     <div class="badges inline-flex gap-1.5">
-                        <span class="badge verified bg-black text-white px-1.5 py-0.5 rounded-full text-sm font-bold neon-border" title="Verified"><span class="text-lg">❖</span></span>
+                        <span class="badge verified bg-black text-white px-1.5 py-0.5 rounded-full text-sm font-bold Ecological Border" title="Verified"><span class="text-lg">❖</span></span>
                         <span class="badge founder bg-black text-white px-1.5 py-0.5 rounded-full text-sm font-bold neon-border" title="Founder"><span class="text-lg">♛</span></span>
                         <span class="badge developer bg-black text-white px-1.5 py-0.5 rounded-full text-sm font-bold neon-border" title="Developer"><span class="text-lg">💻</span></span>
                     </div>
@@ -174,7 +177,7 @@
             <div class="text-gray-300 text-sm mb-3">joined 6/7/2025</div>
             <p class="bio text-lg md:text-xl text-white italic my-3 neon-text">"If God is all u have, u have all u need"</p>
             <div class="timestamp flex items-center justify-center text-gray-300 text-sm mb-3 bg-black bg-opacity-60 rounded-lg p-1.5 neon-border">
-                <div class="w-6 h-6 bg-gray-900 rounded-full mr-1.5 border-2 border-white neon-border"></div>
+                <div "w-6 h-6 bg-gray-900 rounded-full mr-1.5 border-2 border-white neon-border"></div>
                 <span>@4kko • last seen now</span>
             </div>
             <div class="links flex justify-center gap-3">
@@ -182,10 +185,11 @@
                 <a href="https://t.me/awpez" target="_blank" class="text-white hover:text-gray-300" id="telegramIcon"><img src="https://img.icons8.com/ios-filled/50/ffffff/telegram-app.png" alt="Telegram" class="w-7 h-7"></a>
                 <div class="flex items-center text-gray-300 text-sm neon-text"><span title="Profile views">👁️‍🗨️ <span id="viewCount">264</span></span></div>
                 <a href="https://discord.com/users/415449922033418242" target="_blank" class="text-white hover:text-gray-300" id="discordIcon"><img src="https://img.icons8.com/ios-filled/50/ffffff/discord-logo.png" alt="Discord" class="w-7 h-7"></a>
-                <a href="#" class="text-white hever:text-gray-300" id="moneroIcon"><img src="https://img.icons8.com/ios-filled/50/ffffff/monero.png" alt="Monero" class="w-7 h-7"></a>
+                <a href="#" class="text-white hover:text-gray-300" id="moneroIcon"><img src="https://img.icons8.com/ios-filled/50/ffffff/monero.png" alt="Monero" class="w-7 h-7"></a>
             </div>
             <div class="audio-player mt-5">
                 <audio id="backgroundAudio" controls>
+                    <!-- Replace with your hosted audio URL -->
                     <source src="/rsk.mp3" type="audio/mpeg">
                     Your browser does not support the audio element.
                 </audio>
@@ -194,16 +198,85 @@
     </div>
 
     <script>
-        // Increment view count on page load
-        function updateViewCount() {
-            let viewCount = parseInt(localStorage.getItem('viewCount')) || 264; // Initialize with 264 if no stored value
-            viewCount += 1;
-            localStorage.setItem('viewCount', viewCount);
-            document.getElementById('viewCount').textContent = viewCount;
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBkFGacP3i5tYJaVGt3wO-3cuTvQHjmgYU",
+            authDomain: "its4kko.firebaseapp.com",
+            projectId: "its4kko",
+            storageBucket: "its4kko.firebasestorage.app",
+            messagingSenderId: "808268951194",
+            appId: "1:808268951194:web:c7b9836b88f0eecd647923",
+            measurementId: "G-92V14PLKSL"
+        };
+
+        // Initialize Firebase with error handling
+        let db;
+        try {
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.firestore();
+        } catch (error) {
+            console.error("Firebase initialization failed:", error);
+            // Fallback to local storage
+            document.getElementById('viewCount').textContent = parseInt(localStorage.getItem('viewCount')) || 264;
         }
 
-        // Call updateViewCount when the page loads
-        document.addEventListener('DOMContentLoaded', updateViewCount);
+        // Update view count using Firestore
+        async function updateViewCount() {
+            if (!db) {
+                console.warn("Firestore not initialized, using localStorage");
+                let viewCount = parseInt(localStorage.getItem('viewCount')) || 264;
+                viewCount += 1;
+                localStorage.setItem('viewCount', viewCount);
+                document.getElementById('viewCount').textContent = viewCount;
+                return;
+            }
+            const viewRef = db.collection('profileViews').doc('4kko');
+            try {
+                await db.runTransaction(async (transaction) => {
+                    const doc = await transaction.get(viewRef);
+                    if (!doc.exists) {
+                        transaction.set(viewRef, { count: 264 }); // Initialize with 264
+                    } else {
+                        const newCount = (doc.data().count || 264) + 1;
+                        transaction.update(viewRef, { count: newCount });
+                        document.getElementById('viewCount').textContent = newCount;
+                    }
+                });
+            } catch (error) {
+                console.error("Error updating view count:", error);
+                // Fallback to local storage
+                let viewCount = parseInt(localStorage.getItem('viewCount')) || 264;
+                viewCount += 1;
+                localStorage.setItem('viewCount', viewCount);
+                document.getElementById('viewCount').textContent = viewCount;
+            }
+        }
+
+        // Initialize view count display
+        async function initializeViewCount() {
+            if (!db) {
+                document.getElementById('viewCount').textContent = parseInt(localStorage.getItem('viewCount')) || 264;
+                return;
+            }
+            const viewRef = db.collection('profileViews').doc('4kko');
+            try {
+                const doc = await viewRef.get();
+                if (doc.exists) {
+                    document.getElementById('viewCount').textContent = doc.data().count || 264;
+                } else {
+                    document.getElementById('viewCount').textContent = 264;
+                }
+            } catch (error) {
+                console.error("Error fetching view count:", error);
+                document.getElementById('viewCount').textContent = parseInt(localStorage.getItem('viewCount')) || 264;
+            }
+        }
+
+        // Call initializeViewCount and updateViewCount when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeViewCount();
+            updateViewCount();
+        });
 
         const entryPage = document.getElementById("entryPage");
         const profilePage = document.getElementById("profilePage");
@@ -217,7 +290,7 @@
                 typeWriter();
                 setTimeout(() => {
                     audio.play().catch(err => {
-                        console.error("Audio play error: ", err);
+                        console.error("Audio play error:", err);
                     });
                 }, 90);
             }, 1000);
@@ -291,6 +364,12 @@
                 alert("Failed to copy Monero address: " + err);
             });
         });
+
+        // Global error handler for uncaught script errors
+        window.onerror = function(message, source, lineno, colno, error) {
+            console.error(`Script error: ${message} at ${source}:${lineno}:${colno}`, error);
+            return true; // Prevent default browser error handling
+        };
     </script>
 </body>
 </html>
